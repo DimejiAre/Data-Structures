@@ -27,7 +27,7 @@ class LRUCache:
         if key in self.storage:
             element = self.storage[key]
             self.dll.move_to_front(element)
-            return self.dll.head.value
+            return self.dll.head.value[1]
         else:
             return None
 
@@ -46,7 +46,7 @@ class LRUCache:
             # if size greater than limit
             # add value to head of dll
 
-            self.dll.add_to_head(value)
+            self.dll.add_to_head((key,value))
             self.storage[key] = self.dll.head
             self.size += 1
         elif key in self.storage:
@@ -57,21 +57,18 @@ class LRUCache:
 
             node = self.storage[key]
             self.dll.delete(node)
-            self.dll.add_to_head(value)
+            self.dll.add_to_head((key,value))
             self.storage[key] = self.dll.head
         else:
             # remove tail key from storage
             # else remove least recent used element
             # make new insertion the most recent
 
-            el = ''
-            for k,v in self.storage.items():
-                if v == self.dll.tail:
-                    el = k
-            del self.storage[el]
+            k = self.dll.tail.value[0]
+            del self.storage[k]
 
             self.dll.remove_from_tail()
-            self.dll.add_to_head(value)
+            self.dll.add_to_head((key,value))
             self.storage[key] = self.dll.head
 
 
